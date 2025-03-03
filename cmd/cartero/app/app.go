@@ -18,6 +18,15 @@ func NewApp() *App {
 	return &App{tui: t, be: be}
 }
 
+func (a *App) Run() error {
+	err := a.tui.Run()
+	if err != nil {
+		return err
+	}
+	defer a.tui.Close()
+	return nil
+}
+
 func (a *App) CreateEmptyCollection(name string) {
 	c := collection.NewCollection(name, map[string]*request.Request{})
 	a.be.AddCollection(c)
@@ -27,6 +36,6 @@ func (a *App) AddRequestToCollection(collection string, r *request.Request) {
 	a.be.AddRequest(collection, r)
 }
 
-func (a *App) DeleteReqquest(collection, request string) {
+func (a *App) DeleteRequest(collection, request string) {
 	a.be.DeleteRequest(collection, request)
 }
