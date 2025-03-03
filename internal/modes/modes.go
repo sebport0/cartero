@@ -1,10 +1,11 @@
 package modes
 
+type Mode interface{}
+
 type (
-	Mode struct {
+	Normal struct {
 		Name string
 	}
-	Normal       struct{ Mode }
-	Sprinter     struct{ Mode }
-	Orchestrator struct{ Mode }
+	Sprinter     struct{}
+	Orchestrator struct{}
 )
