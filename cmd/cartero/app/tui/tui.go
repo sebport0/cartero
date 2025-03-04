@@ -1,7 +1,6 @@
 package tui
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/awesome-gocui/gocui"
@@ -10,15 +9,15 @@ import (
 
 type TUI struct {
 	client *gocui.Gui
-	cfg    *config.Config
+	config *config.Config
 }
 
-func NewTUI() *TUI {
+func NewTUI(cfg *config.Config) *TUI {
 	a, err := gocui.NewGui(gocui.Output256, true)
 	if err != nil {
 		log.Panicln(err)
 	}
-	return &TUI{client: a}
+	return &TUI{client: a, config: cfg}
 }
 
 func (t *TUI) Close() {
@@ -26,7 +25,7 @@ func (t *TUI) Close() {
 }
 
 func (t *TUI) Run() error {
-	normal := &Normal{}
+	normal := &Normal{t.config.Modes[config.NormalMode]}
 	t.client.SetManager(normal)
 	t.enableMouse()
 	err := t.setKeyBindings()
@@ -44,24 +43,6 @@ func (t *TUI) setKeyBindings() error {
 	if err != nil {
 		return err
 	}
-	return nil
-}
-
-type Normal struct{}
-
-func (n *Normal) Layout(g *gocui.Gui) error {
-	maxX, maxY := g.Size()
-	// Collections view
-	collectionsView, err := g.SetView("collections ", 0, 0, maxX/3, maxY, 0)
-	if err != nil && err != gocui.ErrUnknownView {
-		return err
-	}
-	collectionsView.Clear()
-	fmt.Fprintf(collectionsView, "hello view\ncol1")
-
-	// Request view
-	// Response view
-	// Documentation view
 	return nil
 }
 

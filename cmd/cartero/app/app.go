@@ -4,18 +4,21 @@ import (
 	"github.com/sebport0/cartero/cmd/cartero/app/backend"
 	"github.com/sebport0/cartero/cmd/cartero/app/tui"
 	"github.com/sebport0/cartero/internal/collection"
+	"github.com/sebport0/cartero/internal/config"
 	"github.com/sebport0/cartero/internal/request"
 )
 
 type App struct {
-	tui *tui.TUI
-	be  *backend.Backend
+	tui    *tui.TUI
+	be     *backend.Backend
+	config *config.Config
 }
 
 func NewApp() *App {
-	t := tui.NewTUI()
+	c := config.NewDefaultConfig()
+	t := tui.NewTUI(c)
 	be := backend.NewBackend()
-	return &App{tui: t, be: be}
+	return &App{tui: t, be: be, config: c}
 }
 
 func (a *App) Run() error {
